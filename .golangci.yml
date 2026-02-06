@@ -1,3 +1,4 @@
+version: 2
 run:
   timeout: 5m
   go: "1.25"
@@ -6,29 +7,39 @@ run:
 
 output:
   formats:
-    - format: github-actions
+    github-actions:
+      path: stdout
+  # Optional but recommended since github-actions is deprecated
+  # formats:
+  #   colored-line-number:
+  #     path: stdout
 
 linters:
   disable-all: true
   enable:
-    - dupl # check duplicated code
-    - goconst # check strings that can turn into constants
-    - gofmt # check fmt
-    - goimports # check imports
-    - gosec # check for security problems
-    - govet # check vet
-    - importas # check consistent import aliasing
-    - ineffassign # check ineffectual assignments
-    - misspell # check for misspelled English words
-    - nakedret # check naked returns in functions
-    - prealloc # check preallocated slice declarations
-    - revive # replacement for golint
-    - unconvert # check redundant type conversions
-    - whitespace # check for trailing whitespace and tabs
+    - dupl           # check duplicated code
+    - goconst        # check strings that can turn into constants
+    - gosec          # check for security problems
+    - govet          # check vet
+    - importas       # check consistent import aliasing
+    - ineffassign    # check ineffectual assignments
+    - misspell       # check for misspelled English words
+    - nakedret       # check naked returns in functions
+    - prealloc       # check preallocated slice declarations
+    - revive         # replacement for golint
+    - unconvert      # check redundant type conversions
+    - whitespace     # check for trailing whitespace and tabs
+
+formatters:
+  disable-all: true
+  enable:
+    - goimports
+    - gofmt
+    
 linters-settings:
   revive:
     rules:
-      # The following rules are recommended https://github.com/mgechev/revive#recommended-configuration
+      # Recommended rules
       - name: blank-imports
       - name: context-as-argument
       - name: context-keys-type
@@ -51,6 +62,7 @@ linters-settings:
       - name: unused-parameter
       - name: unreachable-code
       - name: redefines-builtin-id
+
   importas:
     no-unaliased: true
     alias:
@@ -71,21 +83,26 @@ linters-settings:
         alias: kerrors
       - pkg: k8s.io/client-go/kubernetes/scheme
         alias: clientgoscheme
+
       # Rancher GKE operator
       - pkg: github.com/rancher/gke-operator/pkg/apis/gke.cattle.io/v1
         alias: gkev1
       - pkg: github.com/rancher/gke-operator/pkg/generated/controllers/gke.cattle.io/v1
         alias: gkecontrollers
+
       # Golang API
       - pkg: google.golang.org/api/container/v1
         alias: gkeapi
+
 issues:
   exclude-rules:
-  - linters:
-    - revive
-    text: "var-naming: don't use an underscore in package name"
-    path: 'mock(\w+)/doc.go$'
+    - linters:
+        - revive
+      text: "var-naming: don't use an underscore in package name"
+      path: 'mock(\w+)/doc.go$'
+
   exclude-dirs:
     - pkg/generated
+
   exclude-files:
-    - "zz_generated_*"
+    - zz_generated_.*
