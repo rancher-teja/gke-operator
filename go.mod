@@ -2,7 +2,7 @@ module github.com/rancher/gke-operator
 
 go 1.27.0
 
-toolchain go1.27.5
+toolchain go1.27.0
 
 replace (
 	k8s.io/client-go => k8s.io/client-go v0.37.0
@@ -114,6 +114,7 @@ require (
 	sigs.k8s.io/randfill v1.0.0 // indirect
 	sigs.k8s.io/structured-merge-diff/v6 v6.3.2 // indirect
 )
+
 
 
 replace github.com/rancher/lasso => github.com/rancher-teja/lasso v0.0.0-00010101000000-000000000000
